@@ -39,7 +39,7 @@ commands:
 jobs:
   build-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: CIRCLE WORKFLOW_ID/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -56,7 +56,7 @@ jobs:
 
   build-backend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: CIRCLE WORKFLOW_ID/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -73,7 +73,7 @@ jobs:
 
   test-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: CIRCLE WORKFLOW_ID/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -141,16 +141,16 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
               --tags project=your-tag \
-              --stack-name udapeople-backend-${CIRCLECI WORKFLOW_ID:0:7} \
-              --parameter-overrides ID=${CIRCLECI WORKFLOW_ID:0:7}  
+              --stack-name udapeople-backend-${CIRCLE WORKFLOW_ID:0:7} \
+              --parameter-overrides ID=${CIRCLE WORKFLOW_ID:0:7}  
       - run:
           name: Ensure front-end infrastructure exist
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               --tags project=your-tag \
-              --stack-name udapeople-frontend-${CIRCLECI WORKFLOW_ID:0:7} \
-              --parameter-overrides ID=${CIRCLECI WORKFLOW_ID:0:7}  
+              --stack-name udapeople-frontend-${CIRCLE WORKFLOW_ID:0:7} \
+              --parameter-overrides ID=${CIRCLE WORKFLOW_ID:0:7}  
       - run:
           name: Add back-end ip to ansible inventory
           command: |
@@ -163,7 +163,7 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment:
-          workflow_id: ${CIRCLECI_WORKFLOW_ID:0:7}
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       
 
   # configure-infrastructure:
