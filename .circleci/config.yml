@@ -174,19 +174,19 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - "eb:56:58:1e:5f:3b:51:b7:8a:8c:8c:f7:c2:72:e4:8c"
+            - 'eb:56:58:1e:5f:3b:51:b7:8a:8c:8c:f7:c2:72:e4:8c'
       - run:
-          name: "Install ansible"
+          name: Install ansible
           command: |
             apk add --update ansible
       - attach_workspace:
           at: ~/
       - run:
-          name: "Run ansible playbook"
+          name: Run ansible playbook
           command: |
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
-      - destroy-environment:
+      - destroy-environment
       # Here's where you will add some code to rollback on failure      
 
   run-migrations:
