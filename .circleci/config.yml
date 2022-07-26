@@ -174,24 +174,19 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - 'eb:56:58:1e:5f:3b:51:b7:8a:8c:8c:f7:c2:72:e4:8c'
+            - "eb:56:58:1e:5f:3b:51:b7:8a:8c:8c:f7:c2:72:e4:8c"
       - run:
-          name: Install dependencies
+          name: "Install ansible"
           command: |
-            apk add --update --no-cache tar gzip ansible aws-cli
+            apk add --update ansible
       - attach_workspace:
           at: ~/
       - run:
-          name: Configure server
+          name: "Run ansible playbook"
           command: |
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/backend
       - destroy-environment:
-          # workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       # Here's where you will add some code to rollback on failure      
 
   run-migrations:
