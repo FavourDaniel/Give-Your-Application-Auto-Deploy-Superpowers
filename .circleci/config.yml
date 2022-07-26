@@ -179,6 +179,7 @@ jobs:
           name: Install ansible
           command: |
             apk add --update ansible
+
       - attach_workspace:
           at: ~/
       - run:
@@ -218,8 +219,8 @@ jobs:
             then
               curl --insecure https://kvdb.io/EmemMMoQEAFzsrw86V6nC/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
             fi
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}     
+      - destroy-environment
+          # workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}     
 
   # deploy-frontend:
   #   docker:
