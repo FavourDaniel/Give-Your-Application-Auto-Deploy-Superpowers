@@ -173,7 +173,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - 'eb:56:58:1e:5f:3b:51:b7:8a:8c:8c:f7:c2:72:e4:8c'
-       run:
+      - run:
           name: Install dependencies
           command: |
             apk add --update --no-cache tar gzip ansible aws-cli
