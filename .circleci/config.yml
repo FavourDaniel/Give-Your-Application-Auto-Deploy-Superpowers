@@ -16,20 +16,25 @@ commands:
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.workflow_id >>
 
   revert-migrations:
-    description: Revert the last migration if successfully run in the current workflow.
+    description: Revert the last migration
+    parameters:
+      workflow_id:
+        type: string
     steps:
       - run:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS=$(curl --insecure https://kvdb.io/GHBgD2nSDtej83VVEkQmSX/migration_${CIRCLE_WORKFLOW_ID:0:7})
+            SUCCESS=$(curl --insecure  https://kvdb.io/GHBgD2nSDtej83VVEkQmSX/migration_<< parameters.workflow_id >>)
             echo $SUCCESS
-            if [[ "$SUCCESS" == "success" ]]
+            # Logic for reverting the database state
+            if (( $SUCCESS == 1 ));
             then
-              pwd
-              ls -la
-              npm run migrations:revert
+                cd ~/project/backend
+                npm install
+                npm run migrations:revert
             fi
+
             
 
   awscli:
@@ -300,7 +305,8 @@ jobs:
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-      - revert-migrations
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
 
   deploy-backend:
@@ -347,7 +353,8 @@ jobs:
               ansible-playbook -i inventory.txt deploy-backend.yml
         - destroy-environment:
             workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-        - revert-migrations
+        - revert-migrations:
+            workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   smoke-test:
     docker:
@@ -383,7 +390,8 @@ jobs:
             if curl ${URL} | grep "Welcome"; then return 1; else return 1; fi
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-      - revert-migrations
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   cloudfront-update:
     docker:
@@ -412,7 +420,8 @@ jobs:
             echo Current Workflow Id: "${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}  
-      - revert-migrations
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   cleanup:
       docker: 
