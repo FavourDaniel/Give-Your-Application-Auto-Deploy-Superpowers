@@ -267,7 +267,7 @@ jobs:
             sudo apt-get update && sudo apt-get install python -y
             sudo apt-get -qq install awscli
       - restore_cache:
-          keys: [frontend-build]-
+          keys: [frontend-build]
       - run:
           name: Get backend url
           command: |
