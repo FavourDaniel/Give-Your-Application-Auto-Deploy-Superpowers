@@ -395,31 +395,33 @@ jobs:
 
   cloudfront-update:
     docker:
-      - image: amazon/aws-cli
+      - image: cimg/base:stable
     steps:
       - checkout
-      - run: 
-          name: Install dependencies
-          command: yum install -y tar gzip nodejs npm
-      - run: 
+      - awscli
+      - nodejs
+      - run:
+          name: Save Old Workflow ID to a text file
+          command: |
+            aws cloudformation \
+               list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+               --no-paginate --output text > ~/workflowfile.txt
+            cat ~/workflowfile.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - workflowfile.txt
+
+      - run:
           name: Update cloudfront distribution
           command: |
-            export OldWorkflowID=$(aws cloudformation \
-              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-              --no-paginate --output text)
-            echo $OldWorkflowID >> ~/OldWorkflowID.txt
-            cat ~/OldWorkflowID.txt
-            
             aws cloudformation deploy \
               --template-file .circleci/files/cloudfront.yml \
-              --stack-name InitialStack \
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
-              --tags project=udapeople
-            
-            echo OldWorkflowID: "${OldWorkflowID}"
-            echo Current Workflow Id: "${CIRCLE_WORKFLOW_ID:0:7}"
+              --stack-name InitialStack
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}  
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
       - revert-migrations:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
