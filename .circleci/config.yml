@@ -30,6 +30,7 @@ commands:
             # Logic for reverting the database state
             if (( $SUCCESS == 1 ));
             then
+                echo "favour"
                 cd ~/project/backend
                 npm install
                 npm run migrations:revert
