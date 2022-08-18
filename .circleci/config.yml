@@ -25,7 +25,7 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS=$(curl --insecure  https://kvdb.io/GHBgD2nSDtej83VVEkQmSX/migration_<< parameters.workflow_id >>)
+            SUCCESS=$(curl --insecure  https://kvdb.io/CmNCLcHBiY66Coz1C26bRk/migration_<< parameters.workflow_id >>)
             echo $SUCCESS
             # Logic for reverting the database state
             if (( $SUCCESS == 1 ));
@@ -243,7 +243,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: cimg/node:18.3
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - awscli
@@ -262,7 +262,7 @@ jobs:
           command: |
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then  
-                 curl https://kvdb.io/GHBgD2nSDtej83VVEkQmSX/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'  
+                 curl https://kvdb.io/CmNCLcHBiY66Coz1C26bRk/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'  
             fi
 
 
