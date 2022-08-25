@@ -238,7 +238,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: cimg/node:18.3
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - awscli
