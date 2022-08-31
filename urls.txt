@@ -1,0 +1,7 @@
+Public IP of backend instance: http://100.24.5.149:3030/api/status
+
+DNS of CloudFront: http://d16qmdgy3ewcda.cloudfront.net/#/employees
+
+URL of S3 bucket: http://udapeople-28239b0.s3-website-us-east-1.amazonaws.com/#/employees
+
+Github Profile: https://github.com/FavourDaniel/cdond-c3-projectstarter
